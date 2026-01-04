@@ -1,0 +1,42 @@
+.wrapper {
+  border: 1px solid var(--border-app);
+  border-radius: 0;
+  background: var(--bg-panel);
+  overflow: hidden;
+}
+
+.header,
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-app);
+}
+
+.header {
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--border-app);
+}
+
+.cell {
+  display: block;
+  height: 12px;
+  border-radius: 0;
+  background: var(--border-app);
+  animation: pulse 1s steps(4) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0.2;
+  }
+}

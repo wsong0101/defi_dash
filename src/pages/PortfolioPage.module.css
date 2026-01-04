@@ -1,0 +1,534 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.sectionHeader {
+  margin-bottom: 16px;
+}
+
+.strategySection {
+  position: relative;
+  min-height: 400px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusArea {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.statusMain {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-app);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.metricsGroup {
+  display: flex;
+  gap: 16px;
+}
+
+.metricBox {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 120px;
+}
+
+.metricLabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.metricValue {
+  font-size: 24px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.healthBox {
+  composes: metricBox;
+  gap: 8px;
+  min-width: 200px;
+  /* Wider for the bar */
+}
+
+.healthValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  /* Changed to generic primary, color handled by value usually */
+  line-height: 1;
+}
+
+.healthBar {
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #ccff00 0%, #ffaa00 50%, #ff4444 100%);
+  border-radius: 3px;
+  margin-top: 4px;
+  position: relative;
+}
+
+.healthIndicator {
+  position: absolute;
+  top: -4px;
+  width: 4px;
+  /* Slightly thicker */
+  height: 14px;
+  background: #fff;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.healthLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.lendingDetails {
+  flex: 1;
+  border-left: 1px solid var(--border-app);
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailsTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* New Detailed Lending View Styles */
+
+.lendingTablesContainer {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+.lendingPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.panelTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.headerStats {
+  display: flex;
+  gap: 8px;
+}
+
+.statPill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.statLabel {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.tableHeaderRow {
+  display: flex;
+  padding: 0 12px 12px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.assetList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assetRow {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.assetRow:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.assetInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tokenIconPlaceholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2775ca;
+  /* Generic blue for USDC/T */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.assetAmount {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.assetSymbol {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.assetApy {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffaa00;
+  /* Accent color for APY */
+}
+
+/* Toggle Switch */
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: '';
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggleSlider {
+  background-color: var(--accent-primary);
+}
+
+input:checked + .toggleSlider:before {
+  transform: translateX(16px);
+  background-color: #000;
+}
+
+.assetActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.actionBtnPrimary,
+.actionBtnSecondary,
+.actionBtnOutline {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.actionBtnPrimary {
+  background: #f7931a;
+  /* Orange from image */
+  color: #000;
+  border-color: #f7931a;
+}
+
+.actionBtnPrimary:hover {
+  background: #ffaa00;
+  border-color: #ffaa00;
+}
+
+.actionBtnOutline {
+  background: transparent;
+  color: #f7931a;
+  border-color: #f7931a;
+}
+
+.actionBtnOutline:hover {
+  background: rgba(247, 147, 26, 0.1);
+}
+
+.actionBtnSecondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.actionBtnSecondary:hover {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+
+.blurredSection {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(4px);
+  user-select: none;
+}
+
+.comingSoonOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.comingSoonBadge {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-app);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Copy card styles from original for blurred sections */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-app);
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cardLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.cardValue {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 768px) {
+  .statusArea {
+    flex-direction: column;
+  }
+
+  .statusMain {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .metricsGroup {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .lendingDetails {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--border-app);
+    padding-top: 24px;
+    width: 100%;
+  }
+
+  .metricBox {
+    flex: 1 1 calc(50% - 8px);
+    /* 2 per row */
+    min-width: unset;
+  }
+
+  .healthBox {
+    width: 100%;
+    /* Full width for health bar */
+    flex: 1 1 100%;
+  }
+
+  /* Lending Tables Mobile */
+  .lendingTablesContainer {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panelHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .headerStats {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .statPill {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .assetRow {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 8px;
+  }
+
+  .assetInfo {
+    flex: 1 1 100% !important;
+    /* Full width row */
+    margin-bottom: 4px;
+  }
+
+  .assetApy {
+    flex: 1 !important;
+    text-align: left;
+  }
+
+  /* Collateral Toggle */
+  .assetRow > div:nth-child(3) {
+    flex: 0 0 auto !important;
+  }
+
+  .assetActions {
+    flex: 1 1 100% !important;
+    /* Actions take full width bottom row */
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .actionBtnPrimary,
+  .actionBtnOutline,
+  .actionBtnSecondary {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+  }
+
+  .tableHeaderRow {
+    display: none;
+    /* Hide headers on mobile since layout shifts */
+  }
+}
