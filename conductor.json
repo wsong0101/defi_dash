@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "setup": "cd \"$CONDUCTOR_WORKSPACE_PATH\" && if [ -f \"$CONDUCTOR_ROOT_PATH/.env\" ]; then ln -sf \"$CONDUCTOR_ROOT_PATH/.env\" .env; fi && if [ -f \"$CONDUCTOR_ROOT_PATH/.env.public\" ]; then ln -sf \"$CONDUCTOR_ROOT_PATH/.env.public\" .env.public; fi && (npm ci || npm install)",
+    "run": "cd \"$CONDUCTOR_WORKSPACE_PATH\" && PORT=$CONDUCTOR_PORT npm run dev -- --host --port $CONDUCTOR_PORT",
+    "archive": ""
+  },
+  "runScriptMode": "nonconcurrent"
+}
