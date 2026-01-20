@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { useDefiDash } from './useDefiDash';
-import { AccountPortfolio } from 'defi-dash-sdk';
 
 export interface PortfolioSummary {
   totalSuppliedUsd: number;
@@ -41,7 +40,6 @@ export function usePortfolioQuery() {
   let totalSuppliedUsd = 0;
   let totalBorrowedUsd = 0;
   let weightedNetEarnings = 0; // Annual net earnings
-  let healthFactor = 0;
 
   // For simplicity, if multiple protocols, we might need to think about how to combine HF.
   // But typically user uses one main protocol or we show the worst one.
@@ -52,7 +50,28 @@ export function usePortfolioQuery() {
   for (const p of portfolios) {
     if (p.totalCollateralUsd) totalSuppliedUsd += p.totalCollateralUsd;
     if (p.totalDebtUsd) totalBorrowedUsd += p.totalDebtUsd;
-    if (p.totalAnnualNetEarningsUsd) weightedNetEarnings += p.totalAnnualNetEarningsUsd;
+
+    let protocolNetEarnings = p.totalAnnualNetEarningsUsd || 0;
+
+    // Fallback: Calculate manually if missing
+    if (!protocolNetEarnings && p.positions && p.positions.length > 0) {
+      p.positions.forEach((pos) => {
+        const value = pos.valueUsd || 0;
+        // Check for 'apy' which is the base APY.
+        // NOTE: SDK 'apy' is decimal (e.g. 0.05 for 5%).
+        // We should also include rewards if possible, but keep it simple for now or check 'rewardsApy'.
+        // Assuming pos.apy includes everything or is the main component.
+        const apy = pos.apy || 0;
+
+        if (pos.side === 'supply') {
+          protocolNetEarnings += value * apy;
+        } else if (pos.side === 'borrow') {
+          protocolNetEarnings -= value * apy;
+        }
+      });
+    }
+
+    weightedNetEarnings += protocolNetEarnings;
 
     if (p.healthFactor && p.healthFactor > 0 && p.healthFactor < minHealthFactor) {
       minHealthFactor = p.healthFactor;

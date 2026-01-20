@@ -220,7 +220,31 @@ export function LoopingStrategy({
               />
             </div>
           </div>
+
+          <div className={styles.metrics}>
+            <div className={styles.metric}>
+              <span className={styles.metricLabel}>Net APY</span>
+              <span className={`${styles.metricValue} ${netApy >= 0 ? styles.good : styles.danger}`}>
+                {formatPercent(netApy)}
+              </span>
+            </div>
+            <div className={styles.metric}>
+              <span className={styles.metricLabel}>Health Factor</span>
+              <span className={`${styles.metricValue} ${getHealthColor(healthFactor)}`}>
+                {healthFactor === Infinity ? '∞' : healthFactor.toFixed(2)}
+              </span>
+            </div>
+            <div className={styles.metric}>
+              <span className={styles.metricLabel}>Liq. Price (est)</span>
+              <span className={styles.metricValue}>
+                {liquidationPrice > 0 ? `$${liquidationPrice.toFixed(4)}` : '-'}
+              </span>
+            </div>
+          </div>
+
         </>
+
+
       )}
 
       {activeTab === 'unwind' && (
@@ -249,27 +273,6 @@ export function LoopingStrategy({
       )}
 
       {submitError && <div className={styles.errorBox}>{submitError}</div>}
-
-      <div className={styles.metrics}>
-        <div className={styles.metric}>
-          <span className={styles.metricLabel}>Net APY</span>
-          <span className={`${styles.metricValue} ${netApy >= 0 ? styles.good : styles.danger}`}>
-            {formatPercent(netApy)}
-          </span>
-        </div>
-        <div className={styles.metric}>
-          <span className={styles.metricLabel}>Health Factor</span>
-          <span className={`${styles.metricValue} ${getHealthColor(healthFactor)}`}>
-            {healthFactor === Infinity ? '∞' : healthFactor.toFixed(2)}
-          </span>
-        </div>
-        <div className={styles.metric}>
-          <span className={styles.metricLabel}>Liq. Price (est)</span>
-          <span className={styles.metricValue}>
-            {liquidationPrice > 0 ? `$${liquidationPrice.toFixed(4)}` : '-'}
-          </span>
-        </div>
-      </div>
 
       <button
         type="button"

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Modal } from '../components/Modal';
 import { LoopingStrategy } from '../components/LoopingStrategy';
+import { SkeletonTable } from '../components/SkeletonTable';
 import styles from './PortfolioPage.module.css';
 import appStyles from '../App.module.css';
 import { formatNumber, formatPercent, formatPercentValue } from '../utils/format';
@@ -66,7 +67,7 @@ export function PortfolioPage() {
                 <div className={styles.metricBox}>
                   <span className={styles.metricLabel}>Net APY</span>
                   <div className={styles.apyContainer}>
-                    <span className={styles.metricValue}>{formatPercent(netAprPct)}</span>
+                    <span className={styles.metricValue}>{formatPercentValue(netAprPct)}</span>
                     <span className={styles.apyEstimate}>
                       Est. $
                       {formatNumber(
@@ -124,11 +125,10 @@ export function PortfolioPage() {
                 <span className={styles.headerRewards}>Rewards</span>
                 <span className={styles.headerLiqPrice}>Liq. Price</span>
                 <span className={styles.headerValue}>Value</span>
-                <span className={styles.headerActionsSupply}>Actions</span>
               </div>
 
               <div className={styles.assetList}>
-                {isLoading && <div className={styles.emptyState}>Loading positions...</div>}
+                {isLoading && <SkeletonTable rows={3} columns={6} />}
                 {!isLoading && supplyRows.length === 0 && (
                   <div className={styles.emptyState}>No supplies detected.</div>
                 )}
@@ -142,7 +142,7 @@ export function PortfolioPage() {
                       </div>
                     </div>
                     <div className={`${styles.assetApy} ${styles.colApySupply}`}>
-                      {formatPercentValue(asset.apy)}
+                      {formatPercent(asset.apy)}
                     </div>
                     <div className={styles.colRewards}>
                       {asset.rewards && asset.rewards.length > 0 ? (
@@ -161,21 +161,6 @@ export function PortfolioPage() {
                         : '-'}
                     </div>
                     <div className={styles.colValue}>${formatNumber(asset.valueUsd)}</div>
-                    <div className={`${styles.assetActions} ${styles.colActionsSupply}`}>
-                      <button
-                        className={styles.actionBtnPrimary}
-                        onClick={() =>
-                          setSelectedPosition({
-                            token: asset.symbol,
-                            supplyApy: asset.apy,
-                            maxLtv: 0.6,
-                          })
-                        }
-                      >
-                        Deposit
-                      </button>
-                      <button className={styles.actionBtnSecondary}>Withdraw</button>
-                    </div>
                   </div>
                 ))}
               </div>
@@ -197,11 +182,10 @@ export function PortfolioPage() {
                 <span className={styles.headerAssetBorrow}>Asset</span>
                 <span className={styles.headerApyBorrow}>APY</span>
                 <span className={styles.headerRewards}>Rewards</span>
-                <span className={styles.headerActionsBorrow}>Actions</span>
               </div>
 
               <div className={styles.assetList}>
-                {isLoading && <div className={styles.emptyState}>Loading positions...</div>}
+                {isLoading && <SkeletonTable rows={3} columns={4} />}
                 {!isLoading && borrowRows.length === 0 && (
                   <div className={styles.emptyState}>No borrows detected.</div>
                 )}
@@ -219,7 +203,7 @@ export function PortfolioPage() {
                       </div>
                     </div>
                     <div className={`${styles.assetApy} ${styles.colApyBorrow}`}>
-                      {formatPercentValue(asset.apy)}
+                      {formatPercent(asset.apy)}
                     </div>
                     <div className={styles.colRewards}>
                       {asset.rewards && asset.rewards.length > 0 ? (
@@ -231,22 +215,6 @@ export function PortfolioPage() {
                       ) : (
                         <span className={styles.rewardsEmpty}>-</span>
                       )}
-                    </div>
-                    <div className={`${styles.assetActions} ${styles.colActionsBorrow}`}>
-                      <button
-                        className={styles.actionBtnOutline}
-                        onClick={() =>
-                          setSelectedPosition({
-                            token: asset.symbol,
-                            borrowApy: asset.apy,
-                            maxLtv: 0.6,
-                            // leverage: 1,
-                          })
-                        }
-                      >
-                        Borrow
-                      </button>
-                      <button className={styles.actionBtnSecondary}>Repay</button>
                     </div>
                   </div>
                 ))}
