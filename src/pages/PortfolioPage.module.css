@@ -527,10 +527,10 @@ input:checked + .toggleSlider:before {
     padding: 8px;
   }
 
-.tableHeaderRow {
-  display: none;
-  /* Hide headers on mobile since layout shifts */
-}
+  .tableHeaderRow {
+    display: none;
+    /* Hide headers on mobile since layout shifts */
+  }
 }
 
 .emptyState {
@@ -540,4 +540,135 @@ input:checked + .toggleSlider:before {
   border: 1px dashed var(--border-app);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.02);
+}
+
+.apyContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.apyEstimate {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.healthInfo {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: baseline;
+}
+
+.lendingSectionHeader {
+  composes: sectionHeader;
+  margin-top: 32px;
+}
+
+/* Supply Table Columns */
+.colAssetSupply {
+  flex: 1.2;
+}
+
+.colApySupply {
+  flex: 0.8;
+}
+
+.colRewards {
+  flex: 1;
+  font-size: 0.85em;
+  color: #4caf50;
+}
+
+.colLiqPrice {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.colValue {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.colActionsSupply {
+  flex: 1.2;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Borrow Table Columns */
+.colAssetBorrow {
+  flex: 1.5;
+}
+
+.colApyBorrow {
+  flex: 1;
+}
+
+.colActionsBorrow {
+  flex: 1.5;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.rewardsEmpty {
+  color: #888;
+}
+
+/* Header Columns */
+.headerAssetSupply {
+  flex: 1.2;
+}
+
+.headerApySupply {
+  flex: 0.8;
+}
+
+.headerRewards {
+  flex: 1;
+}
+
+.headerLiqPrice {
+  flex: 1;
+  text-align: center;
+}
+
+.headerValue {
+  flex: 1;
+  text-align: center;
+}
+
+.headerActionsSupply {
+  flex: 1.2;
+  text-align: right;
+}
+
+.headerAssetBorrow {
+  flex: 1.5;
+}
+
+.headerApyBorrow {
+  flex: 1;
+}
+
+.headerActionsBorrow {
+  flex: 1.5;
+  text-align: right;
+}
+
+.borrowsIcon {
+  background: #f7931a;
+  color: #fff;
+}
+
+.assetMeta {
+  display: flex;
+  flex-direction: column;
 }

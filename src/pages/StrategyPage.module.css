@@ -1,0 +1,71 @@
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.title {
+  margin-bottom: 12px;
+}
+
+.description {
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+.selectorGroup {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.protocolGroup {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tokenButton {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.tokenButtonActive {
+  border: 1px solid #6cf;
+  background: rgba(108, 190, 255, 0.12);
+}
+
+.tokenIcon {
+  border-radius: 50%;
+}
+
+.protocolButton {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.protocolButtonActive {
+  border: 1px solid #6cf;
+  background: rgba(108, 190, 255, 0.12);
+}
+
+.pendingText {
+  margin-top: 12px;
+  color: var(--text-secondary);
+}

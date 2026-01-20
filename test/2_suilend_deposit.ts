@@ -1,58 +1,45 @@
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 dotenv.config(); // Load SECRET_KEY from .env
-dotenv.config({ path: ".env.public" }); // Load other configs from .env.public
-import {
-  SuilendClient,
-  LENDING_MARKET_ID,
-  LENDING_MARKET_TYPE,
-} from "@suilend/sdk";
-import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
-import { Transaction } from "@mysten/sui/transactions";
-import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
-import { getTokenPrice } from "@7kprotocol/sdk-ts";
-import { getReserveByCoinType } from "../src/lib/const";
+dotenv.config({ path: '.env.public' }); // Load other configs from .env.public
+import { SuilendClient, LENDING_MARKET_ID, LENDING_MARKET_TYPE } from '@suilend/sdk';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { Transaction } from '@mysten/sui/transactions';
+import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { getTokenPrice } from '@7kprotocol/sdk-ts';
+import { getReserveByCoinType } from '../src/lib/const';
 
 // Config from .env.public
-const SUI_COIN_TYPE = "0x2::sui::SUI";
+const SUI_COIN_TYPE = '0x2::sui::SUI';
 const DEPOSIT_COIN_TYPE =
   process.env.DEPOSIT_COIN_TYPE ||
-  "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC";
-const SUI_FULLNODE_URL =
-  process.env.SUI_FULLNODE_URL || getFullnodeUrl("mainnet");
+  '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC';
+const SUI_FULLNODE_URL = process.env.SUI_FULLNODE_URL || getFullnodeUrl('mainnet');
 
 function normalizeCoinType(coinType: string) {
-  const parts = coinType.split("::");
+  const parts = coinType.split('::');
   if (parts.length !== 3) return coinType;
-  let pkg = parts[0].replace("0x", "");
-  pkg = pkg.padStart(64, "0");
+  let pkg = parts[0].replace('0x', '');
+  pkg = pkg.padStart(64, '0');
   return `0x${pkg}::${parts[1]}::${parts[2]}`;
 }
 
-function formatUnits(
-  amount: string | number | bigint,
-  decimals: number
-): string {
+function formatUnits(amount: string | number | bigint, decimals: number): string {
   const s = amount.toString();
   if (decimals === 0) return s;
-  const pad = s.padStart(decimals + 1, "0");
+  const pad = s.padStart(decimals + 1, '0');
   const transition = pad.length - decimals;
-  return (
-    `${pad.slice(0, transition)}.${pad.slice(transition)}`.replace(
-      /\.?0+$/,
-      ""
-    ) || "0"
-  );
+  return `${pad.slice(0, transition)}.${pad.slice(transition)}`.replace(/\.?0+$/, '') || '0';
 }
 
 async function main() {
-  console.log("─".repeat(50));
-  console.log("  📦 Suilend Deposit Script");
-  console.log("─".repeat(50));
+  console.log('─'.repeat(50));
+  console.log('  📦 Suilend Deposit Script');
+  console.log('─'.repeat(50));
 
   // 1. Setup
   const secretKey = process.env.SECRET_KEY;
-  if (!secretKey || secretKey === "YOUR_SECRET_KEY_HERE") {
-    console.error("❌ Error: SECRET_KEY not found in .env file.");
+  if (!secretKey || secretKey === 'YOUR_SECRET_KEY_HERE') {
+    console.error('❌ Error: SECRET_KEY not found in .env file.');
     return;
   }
 
@@ -72,16 +59,14 @@ async function main() {
   const normalizedDepositCoin = normalizeCoinType(DEPOSIT_COIN_TYPE);
   const reserve = getReserveByCoinType(normalizedDepositCoin);
   const decimals = reserve?.decimals || 6;
-  const symbol = reserve?.symbol || "Token";
+  const symbol = reserve?.symbol || 'Token';
 
   console.log(`\n💰 Balances:`);
   balances.forEach((b) => {
     const normalizedB = normalizeCoinType(b.coinType);
     if (normalizedB === normalizedDepositCoin) {
       console.log(
-        `  • ${symbol}: ${formatUnits(b.totalBalance, decimals)} (Raw: ${
-          b.totalBalance
-        })`
+        `  • ${symbol}: ${formatUnits(b.totalBalance, decimals)} (Raw: ${b.totalBalance})`
       );
     } else if (b.coinType === SUI_COIN_TYPE) {
       console.log(`  • SUI: ${formatUnits(b.totalBalance, 9)}`);
@@ -125,7 +110,7 @@ async function main() {
     }
 
     if (!obligationId) {
-      throw new Error("Failed to retrieve Obligation ID.");
+      throw new Error('Failed to retrieve Obligation ID.');
     }
 
     // 4. Check existing deposits
@@ -140,7 +125,7 @@ async function main() {
     });
 
     const DEPOSIT_THRESHOLD = Number(process.env.DEPOSIT_THRESHOLD) || 100000;
-    const DEPOSIT_AMOUNT = process.env.DEPOSIT_AMOUNT || "100000";
+    const DEPOSIT_AMOUNT = process.env.DEPOSIT_AMOUNT || '100000';
     const depositValue = existingDeposit?.depositedCtokenAmount || 0;
 
     // Get asset price
@@ -153,10 +138,7 @@ async function main() {
     console.log(`─`.repeat(45));
     console.log(`  Asset:       ${symbol}`);
     console.log(
-      `  Amount:      ${formatUnits(
-        DEPOSIT_AMOUNT,
-        decimals
-      )} ${symbol} (Raw: ${DEPOSIT_AMOUNT})`
+      `  Amount:      ${formatUnits(DEPOSIT_AMOUNT, decimals)} ${symbol} (Raw: ${DEPOSIT_AMOUNT})`
     );
     console.log(`  Price:       $${assetPrice.toLocaleString()}`);
     console.log(`  USD Value:   ~$${usdValue.toFixed(2)}`);
@@ -167,13 +149,9 @@ async function main() {
 
     // 5. Deposit if needed
     if (Number(depositValue) > DEPOSIT_THRESHOLD) {
-      console.log(
-        `\n⏭️  Skipping deposit (existing > threshold: ${DEPOSIT_THRESHOLD})`
-      );
+      console.log(`\n⏭️  Skipping deposit (existing > threshold: ${DEPOSIT_THRESHOLD})`);
     } else {
-      console.log(
-        `\n🔄 Depositing ${formatUnits(DEPOSIT_AMOUNT, decimals)} ${symbol}...`
-      );
+      console.log(`\n🔄 Depositing ${formatUnits(DEPOSIT_AMOUNT, decimals)} ${symbol}...`);
 
       const depositTx = new Transaction();
       await suilendClient.depositIntoObligation(
@@ -194,9 +172,9 @@ async function main() {
       console.log(`📋 Digest: ${depositResult.digest}`);
     }
 
-    console.log(`\n` + "─".repeat(50));
+    console.log(`\n` + '─'.repeat(50));
     console.log(`  ✨ Done!`);
-    console.log("─".repeat(50));
+    console.log('─'.repeat(50));
   } catch (e: any) {
     console.error(`\n❌ ERROR: ${e.message || e}`);
   }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import styles from '../App.module.css';
+import appStyles from '../App.module.css';
+import styles from './StrategyPage.module.css';
 import { LoopingStrategy } from '../components/LoopingStrategy';
 import { protocols, SUPPORTED_TOKENS } from '../config/protocols';
 import {
@@ -109,34 +110,25 @@ export function StrategyPage() {
   };
 
   return (
-    <main className={styles.content}>
-      <section style={{ maxWidth: 820, margin: '0 auto', width: '100%' }}>
-        <h2 style={{ marginBottom: 12 }}>{selectedToken} → USDC Leverage Loop</h2>
-        <p style={{ marginBottom: 20, color: 'var(--text-secondary)' }}>
+    <main className={appStyles.content}>
+      <section className={styles.container}>
+        <h2 className={styles.title}>{selectedToken} → USDC Leverage Loop</h2>
+        <p className={styles.description}>
           Deposit {selectedToken}, borrow USDC, swap back to {selectedToken}, and repeat using
           Scallop flash loans. Select a protocol below, adjust leverage, then execute with your
           connected Sui wallet.
         </p>
 
         {/* Token Selector */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
+        <div className={styles.selectorGroup}>
           {tokenOptions.map((t) => (
             <button
               key={t.symbol}
               type="button"
               onClick={() => setSelectedToken(t.symbol)}
-              style={{
-                padding: '8px 12px',
-                borderRadius: 8,
-                border: selectedToken === t.symbol ? '1px solid #6cf' : '1px solid #333',
-                background: selectedToken === t.symbol ? 'rgba(108,190,255,0.12)' : 'transparent',
-                color: 'var(--text-primary)',
-                cursor: 'pointer',
-                fontSize: '14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
+              className={`${styles.tokenButton} ${
+                selectedToken === t.symbol ? styles.tokenButtonActive : ''
+              }`}
             >
               {t.icon && (
                 <img
@@ -144,7 +136,7 @@ export function StrategyPage() {
                   alt={t.symbol}
                   width={16}
                   height={16}
-                  style={{ borderRadius: '50%' }}
+                  className={styles.tokenIcon}
                 />
               )}
               {t.name}
@@ -152,21 +144,15 @@ export function StrategyPage() {
           ))}
         </div>
 
-        <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+        <div className={styles.protocolGroup}>
           {protocolOptions.map((option) => (
             <button
               key={option.id}
               type="button"
               onClick={() => setSelectedProtocol(option.id)}
-              style={{
-                padding: '10px 14px',
-                borderRadius: 10,
-                border: selectedProtocol === option.id ? '1px solid #6cf' : '1px solid #333',
-                background:
-                  selectedProtocol === option.id ? 'rgba(108,190,255,0.12)' : 'transparent',
-                color: 'var(--text-primary)',
-                cursor: 'pointer',
-              }}
+              className={`${styles.protocolButton} ${
+                selectedProtocol === option.id ? styles.protocolButtonActive : ''
+              }`}
             >
               {option.name}
             </button>
@@ -184,7 +170,7 @@ export function StrategyPage() {
           onClose={handleClose}
         />
         {(isPendingLoop || isPendingClose) && (
-          <p style={{ marginTop: 12, color: 'var(--text-secondary)' }}>
+          <p className={styles.pendingText}>
             {isPendingLoop ? 'Submitting Open Transaction...' : 'Submitting Close Transaction...'}
           </p>
         )}

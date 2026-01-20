@@ -20,9 +20,7 @@ export function parseAmount(value: string, decimals: number): bigint {
 
 export function getTokenByCoinType(coinType: string) {
   const normalized = coinType.toLowerCase();
-  return Object.values(SUPPORTED_TOKENS).find(
-    (t) => t.coinType.toLowerCase() === normalized
-  );
+  return Object.values(SUPPORTED_TOKENS).find((t) => t.coinType.toLowerCase() === normalized);
 }
 
 export { SUPPORTED_TOKENS } from './protocols';

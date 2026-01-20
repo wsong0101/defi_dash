@@ -65,9 +65,9 @@ export function PortfolioPage() {
                 </div>
                 <div className={styles.metricBox}>
                   <span className={styles.metricLabel}>Net APY</span>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div className={styles.apyContainer}>
                     <span className={styles.metricValue}>{formatPercent(netAprPct)}</span>
-                    <span style={{ fontSize: '0.8em', color: '#888' }}>
+                    <span className={styles.apyEstimate}>
                       Est. $
                       {formatNumber(
                         portfolios.reduce((sum, p) => sum + (p.totalAnnualNetEarningsUsd || 0), 0)
@@ -77,14 +77,7 @@ export function PortfolioPage() {
                   </div>
                 </div>
                 <div className={styles.healthBox}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      width: '100%',
-                      alignItems: 'baseline',
-                    }}
-                  >
+                  <div className={styles.healthInfo}>
                     <span className={styles.metricLabel}>Health Factor</span>
                     <span className={styles.healthValue}>
                       {calculatedHealthFactor === Infinity
@@ -108,7 +101,7 @@ export function PortfolioPage() {
             </div>
           </div>
 
-          <div className={styles.sectionHeader} style={{ marginTop: '32px' }}>
+          <div className={styles.lendingSectionHeader}>
             <h2 className={styles.sectionTitle}>My Lending</h2>
           </div>
 
@@ -126,12 +119,12 @@ export function PortfolioPage() {
               </div>
 
               <div className={styles.tableHeaderRow}>
-                <span style={{ flex: 1.2 }}>Asset</span>
-                <span style={{ flex: 0.8 }}>APY</span>
-                <span style={{ flex: 1 }}>Rewards</span>
-                <span style={{ flex: 1, textAlign: 'center' }}>Liq. Price</span>
-                <span style={{ flex: 1, textAlign: 'center' }}>Value</span>
-                <span style={{ flex: 1.2, textAlign: 'right' }}>Actions</span>
+                <span className={styles.headerAssetSupply}>Asset</span>
+                <span className={styles.headerApySupply}>APY</span>
+                <span className={styles.headerRewards}>Rewards</span>
+                <span className={styles.headerLiqPrice}>Liq. Price</span>
+                <span className={styles.headerValue}>Value</span>
+                <span className={styles.headerActionsSupply}>Actions</span>
               </div>
 
               <div className={styles.assetList}>
@@ -141,17 +134,17 @@ export function PortfolioPage() {
                 )}
                 {supplyRows.map((asset) => (
                   <div key={asset.protocol + asset.coinType + 'supply'} className={styles.assetRow}>
-                    <div className={styles.assetInfo} style={{ flex: 1.2 }}>
+                    <div className={`${styles.assetInfo} ${styles.colAssetSupply}`}>
                       <div className={styles.tokenIconPlaceholder}>{asset.symbol[0]}</div>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div className={styles.assetMeta}>
                         <span className={styles.assetAmount}>{formatNumber(asset.amount)}</span>
                         <span className={styles.assetSymbol}>{asset.symbol}</span>
                       </div>
                     </div>
-                    <div className={styles.assetApy} style={{ flex: 0.8 }}>
+                    <div className={`${styles.assetApy} ${styles.colApySupply}`}>
                       {formatPercentValue(asset.apy)}
                     </div>
-                    <div style={{ flex: 1, fontSize: '0.85em', color: '#4caf50' }}>
+                    <div className={styles.colRewards}>
                       {asset.rewards && asset.rewards.length > 0 ? (
                         asset.rewards.map((r, idx) => (
                           <div key={idx}>
@@ -159,32 +152,16 @@ export function PortfolioPage() {
                           </div>
                         ))
                       ) : (
-                        <span style={{ color: '#888' }}>-</span>
+                        <span className={styles.rewardsEmpty}>-</span>
                       )}
                     </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '13px',
-                      }}
-                    >
+                    <div className={styles.colLiqPrice}>
                       {asset.estimatedLiquidationPrice
                         ? `$${formatNumber(asset.estimatedLiquidationPrice, 2)}`
                         : '-'}
                     </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        textAlign: 'center',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '13px',
-                      }}
-                    >
-                      ${formatNumber(asset.valueUsd)}
-                    </div>
-                    <div className={styles.assetActions} style={{ flex: 1.2 }}>
+                    <div className={styles.colValue}>${formatNumber(asset.valueUsd)}</div>
+                    <div className={`${styles.assetActions} ${styles.colActionsSupply}`}>
                       <button
                         className={styles.actionBtnPrimary}
                         onClick={() =>
@@ -217,10 +194,10 @@ export function PortfolioPage() {
               </div>
 
               <div className={styles.tableHeaderRow}>
-                <span style={{ flex: 1.5 }}>Asset</span>
-                <span style={{ flex: 1 }}>APY</span>
-                <span style={{ flex: 1 }}>Rewards</span>
-                <span style={{ flex: 1.5, textAlign: 'right' }}>Actions</span>
+                <span className={styles.headerAssetBorrow}>Asset</span>
+                <span className={styles.headerApyBorrow}>APY</span>
+                <span className={styles.headerRewards}>Rewards</span>
+                <span className={styles.headerActionsBorrow}>Actions</span>
               </div>
 
               <div className={styles.assetList}>
@@ -230,24 +207,21 @@ export function PortfolioPage() {
                 )}
                 {borrowRows.map((asset) => (
                   <div key={asset.protocol + asset.coinType + 'borrow'} className={styles.assetRow}>
-                    <div className={styles.assetInfo} style={{ flex: 1.5 }}>
-                      <div
-                        className={styles.tokenIconPlaceholder}
-                        style={{ background: '#f7931a', color: '#fff' }}
-                      >
+                    <div className={`${styles.assetInfo} ${styles.colAssetBorrow}`}>
+                      <div className={`${styles.tokenIconPlaceholder} ${styles.borrowsIcon}`}>
                         {asset.symbol[0]}
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div className={styles.assetMeta}>
                         <span className={styles.assetAmount}>
                           {formatNumber(asset.amount)} {asset.symbol}
                         </span>
                         <span className={styles.assetSymbol}>${formatNumber(asset.valueUsd)}</span>
                       </div>
                     </div>
-                    <div className={styles.assetApy} style={{ flex: 1 }}>
+                    <div className={`${styles.assetApy} ${styles.colApyBorrow}`}>
                       {formatPercentValue(asset.apy)}
                     </div>
-                    <div style={{ flex: 1, fontSize: '0.85em', color: '#4caf50' }}>
+                    <div className={styles.colRewards}>
                       {asset.rewards && asset.rewards.length > 0 ? (
                         asset.rewards.map((r, idx) => (
                           <div key={idx}>
@@ -255,10 +229,10 @@ export function PortfolioPage() {
                           </div>
                         ))
                       ) : (
-                        <span style={{ color: '#888' }}>-</span>
+                        <span className={styles.rewardsEmpty}>-</span>
                       )}
                     </div>
-                    <div className={styles.assetActions} style={{ flex: 1.5 }}>
+                    <div className={`${styles.assetActions} ${styles.colActionsBorrow}`}>
                       <button
                         className={styles.actionBtnOutline}
                         onClick={() =>
