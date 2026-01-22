@@ -213,13 +213,15 @@ export function PortfolioPage() {
               </div>
 
               <div className={styles.tableHeaderRow}>
-                <span className={styles.headerAssetBorrow}>Asset</span>
-                <span className={styles.headerApyBorrow}>APY</span>
+                <span className={styles.headerAssetSupply}>Asset</span>
+                <span className={styles.headerApySupply}>APY</span>
                 <span className={styles.headerRewards}>Rewards</span>
+                <span className={styles.headerLiqPrice}>Liq. Price</span>
+                <span className={styles.headerValue}>Value</span>
               </div>
 
               <div className={styles.assetList}>
-                {isLoading && <SkeletonTable rows={3} columns={4} />}
+                {isLoading && <SkeletonTable rows={3} columns={5} />}
                 {!isLoading && borrowRows.length === 0 && (
                   <div className={styles.emptyState}>No borrows detected.</div>
                 )}
@@ -227,7 +229,7 @@ export function PortfolioPage() {
                   const iconUrl = getTokenIcon(asset.symbol);
                   return (
                     <div key={asset.protocol + asset.coinType + 'borrow'} className={styles.assetRow}>
-                      <div className={`${styles.assetInfo} ${styles.colAssetBorrow}`}>
+                      <div className={`${styles.assetInfo} ${styles.colAssetSupply}`}>
                         {iconUrl ? (
                           <img src={iconUrl} alt={asset.symbol} className={styles.tokenIcon} />
                         ) : (
@@ -237,15 +239,15 @@ export function PortfolioPage() {
                         )}
                         <div className={styles.assetMeta}>
                           <span className={styles.assetAmount}>
-                            {formatNumber(asset.amount)} {asset.symbol}
+                            {formatNumber(asset.amount)}
                             <span className={`${styles.protocolBadge} ${getProtocolBadgeClass(asset.protocol)}`}>
                               {asset.protocol}
                             </span>
                           </span>
-                          <span className={styles.assetSymbol}>${formatNumber(asset.valueUsd)}</span>
+                          <span className={styles.assetSymbol}>{asset.symbol}</span>
                         </div>
                       </div>
-                      <div className={`${styles.assetApy} ${styles.colApyBorrow}`}>
+                      <div className={`${styles.assetApy} ${styles.colApySupply}`}>
                         {formatPercent(asset.apy)}
                       </div>
                       <div className={styles.colRewards}>
@@ -259,6 +261,8 @@ export function PortfolioPage() {
                           <span className={styles.rewardsEmpty}>-</span>
                         )}
                       </div>
+                      <div className={styles.colLiqPrice}>-</div>
+                      <div className={styles.colValue}>${formatNumber(asset.valueUsd)}</div>
                     </div>
                   );
                 })}
