@@ -7,6 +7,28 @@ import appStyles from '../App.module.css';
 import { formatNumber, formatPercent, formatPercentValue } from '../utils/format';
 import { usePortfolioQuery } from '../hooks/usePortfolio';
 
+// Token icon URLs (using CoinGecko CDN for common tokens)
+const TOKEN_ICONS: Record<string, string> = {
+  SUI: 'https://assets.coingecko.com/coins/images/26375/small/sui_asset.jpeg',
+  USDC: 'https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png',
+  USDT: 'https://assets.coingecko.com/coins/images/325/small/Tether.png',
+  WETH: 'https://assets.coingecko.com/coins/images/2518/small/weth.png',
+  ETH: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png',
+  WBTC: 'https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png',
+  BTC: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png',
+  LBTC: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png',
+};
+
+function getTokenIcon(symbol: string): string | null {
+  return TOKEN_ICONS[symbol.toUpperCase()] || null;
+}
+
+function getProtocolBadgeClass(protocol: string): string {
+  if (protocol === 'suilend') return styles.protocolSuilend;
+  if (protocol === 'navi') return styles.protocolNavi;
+  return '';
+}
+
 export function PortfolioPage() {
   const { portfolios, summary, isLoading } = usePortfolioQuery();
 
@@ -132,37 +154,49 @@ export function PortfolioPage() {
                 {!isLoading && supplyRows.length === 0 && (
                   <div className={styles.emptyState}>No supplies detected.</div>
                 )}
-                {supplyRows.map((asset) => (
-                  <div key={asset.protocol + asset.coinType + 'supply'} className={styles.assetRow}>
-                    <div className={`${styles.assetInfo} ${styles.colAssetSupply}`}>
-                      <div className={styles.tokenIconPlaceholder}>{asset.symbol[0]}</div>
-                      <div className={styles.assetMeta}>
-                        <span className={styles.assetAmount}>{formatNumber(asset.amount)}</span>
-                        <span className={styles.assetSymbol}>{asset.symbol}</span>
+                {supplyRows.map((asset) => {
+                  const iconUrl = getTokenIcon(asset.symbol);
+                  return (
+                    <div key={asset.protocol + asset.coinType + 'supply'} className={styles.assetRow}>
+                      <div className={`${styles.assetInfo} ${styles.colAssetSupply}`}>
+                        {iconUrl ? (
+                          <img src={iconUrl} alt={asset.symbol} className={styles.tokenIcon} />
+                        ) : (
+                          <div className={styles.tokenIconPlaceholder}>{asset.symbol[0]}</div>
+                        )}
+                        <div className={styles.assetMeta}>
+                          <span className={styles.assetAmount}>
+                            {formatNumber(asset.amount)}
+                            <span className={`${styles.protocolBadge} ${getProtocolBadgeClass(asset.protocol)}`}>
+                              {asset.protocol}
+                            </span>
+                          </span>
+                          <span className={styles.assetSymbol}>{asset.symbol}</span>
+                        </div>
                       </div>
+                      <div className={`${styles.assetApy} ${styles.colApySupply}`}>
+                        {formatPercent(asset.apy)}
+                      </div>
+                      <div className={styles.colRewards}>
+                        {asset.rewards && asset.rewards.length > 0 ? (
+                          asset.rewards.map((r, idx) => (
+                            <div key={idx}>
+                              +{formatNumber(r.amount, 6)} {r.symbol}
+                            </div>
+                          ))
+                        ) : (
+                          <span className={styles.rewardsEmpty}>-</span>
+                        )}
+                      </div>
+                      <div className={styles.colLiqPrice}>
+                        {asset.estimatedLiquidationPrice !== undefined
+                          ? `$${formatNumber(asset.estimatedLiquidationPrice, 2)}`
+                          : '-'}
+                      </div>
+                      <div className={styles.colValue}>${formatNumber(asset.valueUsd)}</div>
                     </div>
-                    <div className={`${styles.assetApy} ${styles.colApySupply}`}>
-                      {formatPercent(asset.apy)}
-                    </div>
-                    <div className={styles.colRewards}>
-                      {asset.rewards && asset.rewards.length > 0 ? (
-                        asset.rewards.map((r, idx) => (
-                          <div key={idx}>
-                            +{formatNumber(r.amount, 6)} {r.symbol}
-                          </div>
-                        ))
-                      ) : (
-                        <span className={styles.rewardsEmpty}>-</span>
-                      )}
-                    </div>
-                    <div className={styles.colLiqPrice}>
-                      {asset.estimatedLiquidationPrice
-                        ? `$${formatNumber(asset.estimatedLiquidationPrice, 2)}`
-                        : '-'}
-                    </div>
-                    <div className={styles.colValue}>${formatNumber(asset.valueUsd)}</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -189,35 +223,45 @@ export function PortfolioPage() {
                 {!isLoading && borrowRows.length === 0 && (
                   <div className={styles.emptyState}>No borrows detected.</div>
                 )}
-                {borrowRows.map((asset) => (
-                  <div key={asset.protocol + asset.coinType + 'borrow'} className={styles.assetRow}>
-                    <div className={`${styles.assetInfo} ${styles.colAssetBorrow}`}>
-                      <div className={`${styles.tokenIconPlaceholder} ${styles.borrowsIcon}`}>
-                        {asset.symbol[0]}
-                      </div>
-                      <div className={styles.assetMeta}>
-                        <span className={styles.assetAmount}>
-                          {formatNumber(asset.amount)} {asset.symbol}
-                        </span>
-                        <span className={styles.assetSymbol}>${formatNumber(asset.valueUsd)}</span>
-                      </div>
-                    </div>
-                    <div className={`${styles.assetApy} ${styles.colApyBorrow}`}>
-                      {formatPercent(asset.apy)}
-                    </div>
-                    <div className={styles.colRewards}>
-                      {asset.rewards && asset.rewards.length > 0 ? (
-                        asset.rewards.map((r, idx) => (
-                          <div key={idx}>
-                            +{formatNumber(r.amount, 6)} {r.symbol}
+                {borrowRows.map((asset) => {
+                  const iconUrl = getTokenIcon(asset.symbol);
+                  return (
+                    <div key={asset.protocol + asset.coinType + 'borrow'} className={styles.assetRow}>
+                      <div className={`${styles.assetInfo} ${styles.colAssetBorrow}`}>
+                        {iconUrl ? (
+                          <img src={iconUrl} alt={asset.symbol} className={styles.tokenIcon} />
+                        ) : (
+                          <div className={`${styles.tokenIconPlaceholder} ${styles.borrowsIcon}`}>
+                            {asset.symbol[0]}
                           </div>
-                        ))
-                      ) : (
-                        <span className={styles.rewardsEmpty}>-</span>
-                      )}
+                        )}
+                        <div className={styles.assetMeta}>
+                          <span className={styles.assetAmount}>
+                            {formatNumber(asset.amount)} {asset.symbol}
+                            <span className={`${styles.protocolBadge} ${getProtocolBadgeClass(asset.protocol)}`}>
+                              {asset.protocol}
+                            </span>
+                          </span>
+                          <span className={styles.assetSymbol}>${formatNumber(asset.valueUsd)}</span>
+                        </div>
+                      </div>
+                      <div className={`${styles.assetApy} ${styles.colApyBorrow}`}>
+                        {formatPercent(asset.apy)}
+                      </div>
+                      <div className={styles.colRewards}>
+                        {asset.rewards && asset.rewards.length > 0 ? (
+                          asset.rewards.map((r, idx) => (
+                            <div key={idx}>
+                              +{formatNumber(r.amount, 6)} {r.symbol}
+                            </div>
+                          ))
+                        ) : (
+                          <span className={styles.rewardsEmpty}>-</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

@@ -308,11 +308,11 @@
   border-radius: 50%;
 }
 
-input:checked + .toggleSlider {
+input:checked+.toggleSlider {
   background-color: var(--accent-primary);
 }
 
-input:checked + .toggleSlider:before {
+input:checked+.toggleSlider:before {
   transform: translateX(16px);
   background-color: #000;
 }
@@ -508,7 +508,7 @@ input:checked + .toggleSlider:before {
   }
 
   /* Collateral Toggle */
-  .assetRow > div:nth-child(3) {
+  .assetRow>div:nth-child(3) {
     flex: 0 0 auto !important;
   }
 
@@ -671,4 +671,30 @@ input:checked + .toggleSlider:before {
 .assetMeta {
   display: flex;
   flex-direction: column;
+}
+
+.protocolBadge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.protocolSuilend {
+  background: rgba(108, 190, 255, 0.15);
+  color: #6cf;
+}
+
+.protocolNavi {
+  background: rgba(255, 170, 0, 0.15);
+  color: #ffaa00;
+}
+
+.tokenIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
 }
